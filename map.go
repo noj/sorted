@@ -23,19 +23,19 @@ func NewMap[K cmp.Ordered, V any]() *Map[K, V] {
 	}
 }
 
-func (m Map[K, V]) keySearch(key K) (int, bool) {
+func (m *Map[K, V]) keySearch(key K) (int, bool) {
 	return slices.BinarySearch(m.keys, key)
 }
 
 // Checks if the key is present in the map
-func (m Map[K, V]) Contains(key K) bool {
+func (m *Map[K, V]) Contains(key K) bool {
 	_, found := m.keySearch(key)
 	return found
 }
 
 // Returns the value in the map, if found and an indicator whether found or not.
 // If not found the value will be the 0-value
-func (m Map[K, V]) Get(key K) (V, bool) {
+func (m *Map[K, V]) Get(key K) (V, bool) {
 	if idx, found := m.keySearch(key); found {
 		return m.vals[idx], true
 	}
@@ -67,7 +67,7 @@ func (m *Map[K, V]) Put(key K, value V) bool {
 }
 
 // Iterates through the key-value set, in key order
-func (m Map[K, V]) Items() iter.Seq2[K, *V] {
+func (m *Map[K, V]) Items() iter.Seq2[K, *V] {
 	return func(yield func(k K, v *V) bool) {
 		for idx, k := range m.keys {
 			if !yield(k, &m.vals[idx]) {
@@ -78,17 +78,17 @@ func (m Map[K, V]) Items() iter.Seq2[K, *V] {
 }
 
 // Returns list of all keys
-func (m Map[K, V]) Keys() []K {
+func (m *Map[K, V]) Keys() []K {
 	return m.keys
 }
 
 // Returns list of all values
-func (m Map[K, V]) Vals() []V {
+func (m *Map[K, V]) Vals() []V {
 	return m.vals
 }
 
 // Returns the number of element in the map
-func (m Map[K, V]) Len() int {
+func (m *Map[K, V]) Len() int {
 	return len(m.keys)
 }
 

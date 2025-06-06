@@ -25,11 +25,11 @@ func NewSet[T cmp.Ordered](items ...T) *Set[T] {
 	}
 }
 
-func (s Set[T]) keySearch(key T) (int, bool) {
+func (s *Set[T]) keySearch(key T) (int, bool) {
 	return slices.BinarySearch(s.vals, key)
 }
 
-func (s Set[T]) Contains(val T) bool {
+func (s *Set[T]) Contains(val T) bool {
 	_, found := s.keySearch(val)
 	return found
 }
@@ -48,11 +48,11 @@ func (s *Set[T]) Put(val T) bool {
 	return true
 }
 
-func (s Set[T]) Values() []T {
+func (s *Set[T]) Values() []T {
 	return s.vals
 }
 
-func (s Set[T]) Items() iter.Seq[T] {
+func (s *Set[T]) Items() iter.Seq[T] {
 	return func(yield func(T) bool) {
 		for _, val := range s.vals {
 			if !yield(val) {
@@ -62,7 +62,7 @@ func (s Set[T]) Items() iter.Seq[T] {
 	}
 }
 
-func (s Set[T]) Len() int {
+func (s *Set[T]) Len() int {
 	return len(s.vals)
 }
 
