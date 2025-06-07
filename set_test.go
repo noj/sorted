@@ -2,6 +2,7 @@ package sorted
 
 import (
 	"encoding/json"
+	"fmt"
 	"slices"
 	"testing"
 )
@@ -50,6 +51,24 @@ func TestSortedSet(t *testing.T) {
 	// Var args ctor
 	s2 := NewSet(4, 3, 4, 4)
 	assertTrue(t, slices.Equal([]int{3, 4}, s2.Values()))
+}
+
+func TestSetUnion(t *testing.T) {
+	s1 := NewSet(1, 2, 3)
+	s2 := NewSet(4, 5, 6)
+
+	res := s1.Union(s2)
+
+	assertEqual(t, "[1 2 3 4 5 6]", fmt.Sprintf("%+v", res.Values()))
+}
+
+func TestSetIntersection(t *testing.T) {
+	s1 := NewSet(1, 2, 3, 4)
+	s2 := NewSet(4, 5, 6)
+
+	res := s1.Intersection(s2)
+
+	assertEqual(t, "[4]", fmt.Sprintf("%+v", res.Values()))
 }
 
 func TestSortedSetJSON(t *testing.T) {

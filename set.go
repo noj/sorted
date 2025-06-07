@@ -92,3 +92,53 @@ func (s *Set[T]) UnmarshalJSON(b []byte) error {
 	s.vals = toSliceSet(s.vals)
 	return nil
 }
+
+// Set operations
+func (s *Set[T]) Union(other *Set[T]) *Set[T] {
+	res := NewSet[T]()
+
+	for val := range s.Items() {
+		res.Put(val)
+	}
+	for val := range other.Items() {
+		res.Put(val)
+	}
+
+	return res
+}
+
+func (s *Set[T]) Intersection(other *Set[T]) *Set[T] {
+	res := NewSet[T]()
+
+	for v := range s.Items() {
+		if other.Contains(v) {
+			res.Put(v)
+		}
+	}
+
+	for v := range other.Items() {
+		if s.Contains(v) {
+			res.Put(v)
+		}
+	}
+
+	return res
+}
+
+func (s *Set[T]) Difference(other *Set[T]) *Set[T] {
+	res := NewSet[T]()
+
+	for v := range s.Items() {
+		if !other.Contains(v) {
+			res.Put(v)
+		}
+	}
+
+	for v := range other.Items() {
+		if !s.Contains(v) {
+			res.Put(v)
+		}
+	}
+
+	return res
+}
